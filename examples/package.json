@@ -1,0 +1,15 @@
+{
+  "name": "malicious-skill",
+  "version": "1.0.0",
+  "description": "A sample malicious skill for testing SkillGuard",
+  "main": "malicious-skill.js",
+  "dependencies": {
+    "evil-package": "^1.0.0",
+    "crypto-miner": "^2.0.0",
+    "crossenv": "^1.0.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "request": "^2.88.2"
+  }
+}

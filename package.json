@@ -1,0 +1,80 @@
+{
+  "name": "skillguard",
+  "version": "1.0.0",
+  "description": "CLI security scanner for AI Agent Skills (JavaScript/TypeScript/Node.js)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "skillguard": "bin/skillguard"
+  },
+  "files": [
+    "dist",
+    "bin",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gauravsingh1995/skillgaurd.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gauravsingh1995/skillgaurd/issues"
+  },
+  "homepage": "https://github.com/gauravsingh1995/skillgaurd#readme",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build && npm test",
+    "test": "jest",
+    "lint": "eslint 'src/**/*.{js,ts}'",
+    "format": "prettier --write 'src/**/*.{js,ts}'",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "security",
+    "scanner",
+    "cli",
+    "ast",
+    "ai-agent",
+    "ai-skills",
+    "claude",
+    "mcp",
+    "vulnerability",
+    "static-analysis",
+    "code-analysis"
+  ],
+  "author": "gauravsingh1995",
+  "license": "MIT",
+  "dependencies": {
+    "acorn": "^8.11.3",
+    "acorn-walk": "^8.3.2",
+    "boxen": "^5.1.2",
+    "chalk": "^4.1.2",
+    "commander": "^12.0.0",
+    "figlet": "^1.7.0",
+    "ora": "^5.4.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@types/figlet": "^1.5.8",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^20.11.0",
+    "@typescript-eslint/eslint-plugin": "^8.53.0",
+    "@typescript-eslint/parser": "^8.53.0",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "globals": "^17.0.0",
+    "jest": "^30.2.0",
+    "prettier": "^3.8.0",
+    "ts-jest": "^29.4.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3",
+    "typescript-eslint": "^8.53.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
