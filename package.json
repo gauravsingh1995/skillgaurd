@@ -1,5 +1,5 @@
 {
-  "name": "skillgaurd",
+  "name": "@gauravsingh1995/skillgaurd",
   "version": "1.1.0",
   "description": "CLI security scanner for AI Agent Skills (JavaScript/TypeScript/Node.js)",
   "main": "dist/index.js",
@@ -21,6 +21,9 @@
     "url": "https://github.com/gauravsingh1995/skillgaurd/issues"
   },
   "homepage": "https://github.com/gauravsingh1995/skillgaurd#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
