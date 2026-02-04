@@ -5,6 +5,21 @@
 
 export type RiskSeverity = 'critical' | 'high' | 'medium' | 'low';
 
+export type Language =
+  | 'javascript'
+  | 'typescript'
+  | 'python'
+  | 'java'
+  | 'go'
+  | 'ruby'
+  | 'php'
+  | 'cpp'
+  | 'c'
+  | 'rust'
+  | 'csharp'
+  | 'kotlin'
+  | 'swift';
+
 export interface Finding {
   file: string;
   line: number;
@@ -13,6 +28,7 @@ export interface Finding {
   category: string;
   description: string;
   codeSnippet: string;
+  language?: Language;
 }
 
 export interface DependencyFinding {
@@ -46,6 +62,13 @@ export interface RiskPattern {
   description: string;
   nodeType: string;
   matcher: (node: any, ancestors?: any[]) => boolean;
+}
+
+export interface LanguageAnalyzer {
+  readonly language: Language;
+  readonly fileExtensions: string[];
+  analyzeFile(filePath: string): Promise<Finding[]> | Finding[];
+  canAnalyze(filePath: string): boolean;
 }
 
 export interface ThreatEntry {

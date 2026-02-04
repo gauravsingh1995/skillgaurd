@@ -1,7 +1,7 @@
 {
   "name": "@gauravsingh1995/skillgaurd",
   "version": "1.1.1",
-  "description": "CLI security scanner for AI Agent Skills (JavaScript/TypeScript/Node.js)",
+  "description": "CLI security scanner for AI Agent Skills (Multi-language support: JavaScript, TypeScript, Python, Java, Go, Ruby, PHP, C/C++, Rust)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {

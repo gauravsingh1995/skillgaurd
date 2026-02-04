@@ -1,0 +1,33 @@
+{
+  "description": "Permissive configuration - suitable for development environments",
+
+  "riskThresholds": {
+    "low": 1,
+    "medium": 40,
+    "high": 70,
+    "critical": 90
+  },
+
+  "severityWeights": {
+    "critical": 40,
+    "high": 20,
+    "medium": 10,
+    "low": 5
+  },
+
+  "globalPatternOverrides": [
+    {
+      "pattern": "fetch",
+      "severity": "low"
+    },
+    {
+      "pattern": "http.request",
+      "severity": "low"
+    },
+    {
+      "pattern": "process.env",
+      "enabled": false,
+      "description": "Environment variable access is common in development"
+    }
+  ]
+}

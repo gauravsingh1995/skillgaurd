@@ -4,11 +4,12 @@
  */
 
 import { Finding, DependencyFinding, ScanResult, RiskSeverity } from './types';
+import { getConfigLoader } from './config';
 
 /**
- * Risk score weights by category
+ * Risk score weights by category (used when config not available)
  */
-const CATEGORY_WEIGHTS: Record<string, number> = {
+const DEFAULT_CATEGORY_WEIGHTS: Record<string, number> = {
   'Shell Execution': 50,
   'Code Injection': 50,
   'File System Write': 30,
@@ -16,26 +17,12 @@ const CATEGORY_WEIGHTS: Record<string, number> = {
   'File System Permissions': 25,
   'Network Access': 20,
   'Environment Access': 10,
-};
-
-/**
- * Risk score weights by severity
- */
-const SEVERITY_WEIGHTS: Record<RiskSeverity, number> = {
-  critical: 50,
-  high: 30,
-  medium: 15,
-  low: 5,
-};
-
-/**
- * Dependency threat weights
- */
-const DEPENDENCY_SEVERITY_WEIGHTS: Record<RiskSeverity, number> = {
-  critical: 40,
-  high: 25,
-  medium: 15,
-  low: 5,
+  'Buffer Overflow': 50,
+  'Memory Management': 30,
+  'Deserialization': 30,
+  'Unsafe Operations': 40,
+  'Reflection': 30,
+  'Dynamic Method Call': 30,
 };
 
 /**
@@ -47,12 +34,15 @@ export function calculateRiskScore(
   dependencyFindings: DependencyFinding[],
 ): number {
   let score = 0;
+  const configLoader = getConfigLoader();
 
   // Score code findings
   for (const finding of codeFindings) {
+    // Get severity weight from config
+    const severityWeight = configLoader.getSeverityWeight(finding.severity);
+
     // Use category weight if available, otherwise use severity weight
-    const categoryWeight = CATEGORY_WEIGHTS[finding.category];
-    const severityWeight = SEVERITY_WEIGHTS[finding.severity];
+    const categoryWeight = DEFAULT_CATEGORY_WEIGHTS[finding.category];
 
     // Take the higher of the two weights
     score += Math.max(categoryWeight || 0, severityWeight);
@@ -60,7 +50,8 @@ export function calculateRiskScore(
 
   // Score dependency findings
   for (const finding of dependencyFindings) {
-    score += DEPENDENCY_SEVERITY_WEIGHTS[finding.severity];
+    // Use configurable severity weights for dependencies too
+    score += configLoader.getSeverityWeight(finding.severity);
   }
 
   // Cap the score at 100
@@ -68,14 +59,11 @@ export function calculateRiskScore(
 }
 
 /**
- * Determine risk level from score
+ * Determine risk level from score using configurable thresholds
  */
 export function getRiskLevel(score: number): ScanResult['riskLevel'] {
-  if (score === 0) return 'safe';
-  if (score <= 20) return 'low';
-  if (score <= 50) return 'medium';
-  if (score <= 75) return 'high';
-  return 'critical';
+  const configLoader = getConfigLoader();
+  return configLoader.getRiskLevel(score);
 }
 
 /**

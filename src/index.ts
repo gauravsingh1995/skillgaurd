@@ -9,21 +9,26 @@ import { Command } from 'commander';
 import * as path from 'path';
 import { scan } from './scanner';
 import { showLogo, createSpinner, showReport, showError, showInfo } from './ui';
+import { initializeConfig } from './config';
 
 const program = new Command();
 
 program
   .name('skillguard')
-  .description('🛡️  Security scanner for AI Agent Skills (JavaScript/TypeScript)')
-  .version('1.0.0');
+  .description('🛡️  Security scanner for AI Agent Skills (Multi-language: JS/TS/Python/Java/Go/Ruby/PHP/C/C++/Rust)')
+  .version('1.1.1');
 
 program
   .command('scan <directory>')
   .description('Scan a directory for security vulnerabilities')
   .option('-q, --quiet', 'Suppress the ASCII logo')
   .option('-j, --json', 'Output results as JSON')
-  .action(async (directory: string, options: { quiet?: boolean; json?: boolean }) => {
+  .option('-c, --config <path>', 'Path to custom configuration file')
+  .action(async (directory: string, options: { quiet?: boolean; json?: boolean; config?: string }) => {
     try {
+      // Initialize configuration
+      initializeConfig(options.config, directory);
+
       // Show logo unless quiet mode
       if (!options.quiet && !options.json) {
         showLogo();

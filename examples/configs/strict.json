@@ -1,0 +1,44 @@
+{
+  "description": "Strict configuration - suitable for production and high-security environments",
+
+  "riskThresholds": {
+    "low": 1,
+    "medium": 10,
+    "high": 30,
+    "critical": 50
+  },
+
+  "severityWeights": {
+    "critical": 60,
+    "high": 40,
+    "medium": 25,
+    "low": 15
+  },
+
+  "globalPatternOverrides": [
+    {
+      "pattern": "eval",
+      "severity": "critical",
+      "description": "Absolutely no eval() allowed"
+    },
+    {
+      "pattern": "exec",
+      "severity": "critical"
+    },
+    {
+      "pattern": "system",
+      "severity": "critical"
+    },
+    {
+      "pattern": "fetch",
+      "severity": "high",
+      "description": "All network access must be reviewed"
+    }
+  ],
+
+  "dependencyScanning": {
+    "enabled": true,
+    "npmAudit": true,
+    "osvScanning": true
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "$schema": "https://skillguard.dev/schema.json",
+  "description": "Example SkillGuard configuration with all available options",
+
+  "riskThresholds": {
+    "safe": 0,
+    "low": 1,
+    "medium": 21,
+    "high": 51,
+    "critical": 76
+  },
+
+  "severityWeights": {
+    "critical": 50,
+    "high": 30,
+    "medium": 20,
+    "low": 10
+  },
+
+  "globalPatternOverrides": [
+    {
+      "pattern": "fetch",
+      "severity": "low",
+      "description": "HTTP fetch - reviewed and approved for this project"
+    },
+    {
+      "pattern": "axios",
+      "severity": "low"
+    }
+  ],
+
+  "languages": {
+    "javascript": {
+      "enabled": true,
+      "patternOverrides": [
+        {
+          "pattern": "eval",
+          "severity": "critical",
+          "enabled": true
+        }
+      ]
+    },
+    "python": {
+      "enabled": true,
+      "patternOverrides": [
+        {
+          "pattern": "subprocess.call",
+          "severity": "high",
+          "description": "Subprocess usage is expected in this project"
+        },
+        {
+          "pattern": "os.system",
+          "severity": "critical",
+          "enabled": true
+        }
+      ]
+    },
+    "java": {
+      "enabled": true
+    },
+    "go": {
+      "enabled": true
+    },
+    "ruby": {
+      "enabled": true
+    },
+    "php": {
+      "enabled": true
+    },
+    "cpp": {
+      "enabled": true
+    },
+    "rust": {
+      "enabled": true
+    }
+  },
+
+  "excludePatterns": [
+    "node_modules",
+    "dist",
+    "build",
+    "target",
+    "vendor",
+    "__pycache__",
+    ".git",
+    "venv",
+    "env",
+    "test",
+    "tests",
+    "__tests__"
+  ],
+
+  "includePatterns": [],
+
+  "dependencyScanning": {
+    "enabled": true,
+    "npmAudit": true,
+    "osvScanning": true
+  }
+}

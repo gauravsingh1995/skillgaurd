@@ -1,0 +1,65 @@
+{
+  "description": "Configuration focused on network security - for applications with data exfiltration concerns",
+
+  "severityWeights": {
+    "critical": 50,
+    "high": 30,
+    "medium": 20,
+    "low": 10
+  },
+
+  "globalPatternOverrides": [
+    {
+      "pattern": "fetch",
+      "severity": "critical",
+      "description": "Network requests are high risk in this environment"
+    },
+    {
+      "pattern": "axios",
+      "severity": "critical"
+    },
+    {
+      "pattern": "http.request",
+      "severity": "critical"
+    },
+    {
+      "pattern": "requests.get",
+      "severity": "critical"
+    },
+    {
+      "pattern": "http.Get",
+      "severity": "critical"
+    },
+    {
+      "pattern": "XMLHttpRequest",
+      "severity": "critical"
+    },
+    {
+      "pattern": "WebSocket",
+      "severity": "critical"
+    },
+    {
+      "pattern": "socket",
+      "severity": "critical"
+    }
+  ],
+
+  "languages": {
+    "python": {
+      "patternOverrides": [
+        {
+          "pattern": "requests",
+          "severity": "critical"
+        },
+        {
+          "pattern": "urllib",
+          "severity": "critical"
+        },
+        {
+          "pattern": "socket",
+          "severity": "critical"
+        }
+      ]
+    }
+  }
+}

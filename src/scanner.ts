@@ -29,7 +29,7 @@ export async function scan(targetDir: string): Promise<ScanResult> {
   }
 
   // Run code analysis
-  const { findings: codeFindings, scannedFiles } = analyzeDirectory(absolutePath);
+  const { findings: codeFindings, scannedFiles } = await analyzeDirectory(absolutePath);
 
   // Run dependency analysis with real vulnerability scanning
   const dependencyFindings = await inspectDependenciesAsync(absolutePath);
