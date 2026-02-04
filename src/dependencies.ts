@@ -238,7 +238,7 @@ export async function inspectDependenciesAsync(targetDir: string): Promise<Depen
     const vulnerabilities = await scanVulnerabilities(targetDir);
 
     // Add vulnerabilities, avoiding duplicates
-    const existingKeys = new Set(findings.map(f => f.name.toLowerCase()));
+    const existingKeys = new Set(findings.map((f) => f.name.toLowerCase()));
 
     for (const vuln of vulnerabilities) {
       // Don't duplicate if already found by threat DB (but allow multiple vulns per package)

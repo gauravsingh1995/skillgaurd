@@ -115,9 +115,7 @@ function displayVulnerabilityFinding(finding: DependencyFinding): void {
   console.log();
 
   // Package name with version if available
-  const pkgDisplay = finding.version
-    ? `${finding.name}@${finding.version}`
-    : finding.name;
+  const pkgDisplay = finding.version ? `${finding.name}@${finding.version}` : finding.name;
   console.log(`    ${formatSeverityBadge(finding.severity)} ${colors.bold(pkgDisplay)}`);
 
   // CVE ID if available
@@ -242,10 +240,10 @@ export function showReport(result: ScanResult, targetDir: string): void {
 
     // Group by source for better organization
     const vulnFindings = result.dependencyFindings.filter(
-      (f) => f.source === 'npm-audit' || f.source === 'osv'
+      (f) => f.source === 'npm-audit' || f.source === 'osv',
     );
     const threatDbFindings = result.dependencyFindings.filter(
-      (f) => f.source === 'threat-db' || f.source === 'pattern' || !f.source
+      (f) => f.source === 'threat-db' || f.source === 'pattern' || !f.source,
     );
 
     // Show real vulnerabilities first
@@ -329,23 +327,27 @@ export function showReport(result: ScanResult, targetDir: string): void {
     }
     if (result.dependencyFindings.length > 0) {
       const hasVulns = result.dependencyFindings.some(
-        (f) => f.source === 'npm-audit' || f.source === 'osv'
+        (f) => f.source === 'npm-audit' || f.source === 'osv',
       );
       const hasFixable = result.dependencyFindings.some((f) => f.fixAvailable);
       const hasCriticalVulns = result.dependencyFindings.some(
-        (f) => f.severity === 'critical' && (f.source === 'npm-audit' || f.source === 'osv')
+        (f) => f.severity === 'critical' && (f.source === 'npm-audit' || f.source === 'osv'),
       );
 
       if (hasCriticalVulns) {
         console.log(
-          colors.danger('  ⚠ CRITICAL vulnerabilities found! Update affected packages immediately.')
+          colors.danger(
+            '  ⚠ CRITICAL vulnerabilities found! Update affected packages immediately.',
+          ),
         );
       }
       if (hasVulns) {
         console.log(colors.warning('  ⚠ Known vulnerabilities detected in dependencies.'));
       }
       if (hasFixable) {
-        console.log(colors.success('  ✓ Some vulnerabilities have fixes available. Run: npm audit fix'));
+        console.log(
+          colors.success('  ✓ Some vulnerabilities have fixes available. Run: npm audit fix'),
+        );
       }
       if (!hasVulns && result.dependencyFindings.length > 0) {
         console.log(colors.warning('  ⚠ Review flagged dependencies before installing.'));

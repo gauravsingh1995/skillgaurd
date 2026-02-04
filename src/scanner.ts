@@ -6,7 +6,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { analyzeDirectory } from './analyzer';
-import { inspectDependencies, inspectDependenciesAsync } from './dependencies';
+import { inspectDependenciesAsync } from './dependencies';
 import { calculateRiskScore, getRiskLevel } from './scorer';
 import { ScanResult } from './types';
 

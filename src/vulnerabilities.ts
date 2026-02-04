@@ -180,7 +180,7 @@ export async function runNpmAudit(targetDir: string): Promise<DependencyFinding[
       for (const [pkgName, vuln] of Object.entries(auditResult.vulnerabilities)) {
         // Get detailed vulnerability info from 'via' field
         const viaDetails = vuln.via.find(
-          (v): v is NpmAuditVia => typeof v === 'object' && 'title' in v
+          (v): v is NpmAuditVia => typeof v === 'object' && 'title' in v,
         );
 
         let reason = `Vulnerable package detected`;
@@ -221,7 +221,7 @@ export async function runNpmAudit(targetDir: string): Promise<DependencyFinding[
         });
       }
     }
-  } catch (error) {
+  } catch (_error) {
     // npm audit failed - could be network issue, private registry, etc.
     // Silently continue as OSV check will be performed separately
   }
@@ -264,7 +264,7 @@ async function queryOsv(packageName: string, version: string): Promise<OsvVulner
  * Query OSV for multiple packages in batch
  */
 async function batchQueryOsv(
-  packages: Array<{ name: string; version: string }>
+  packages: Array<{ name: string; version: string }>,
 ): Promise<Map<string, OsvVulnerability[]>> {
   const results = new Map<string, OsvVulnerability[]>();
 
@@ -330,7 +330,7 @@ async function batchQueryOsv(
  * Parse package-lock.json to get all dependencies with versions
  */
 function parseLockFile(
-  targetDir: string
+  targetDir: string,
 ): Array<{ name: string; version: string; isDev: boolean }> {
   const packages: Array<{ name: string; version: string; isDev: boolean }> = [];
   const packageLockPath = path.join(targetDir, 'package-lock.json');
@@ -363,8 +363,11 @@ function parseLockFile(
     // Handle npm v6 lockfile format (lockfileVersion 1)
     else if (lockData.dependencies) {
       const extractDeps = (
-        deps: Record<string, { version: string; dev?: boolean; dependencies?: Record<string, unknown> }>,
-        isDev: boolean = false
+        deps: Record<
+          string,
+          { version: string; dev?: boolean; dependencies?: Record<string, unknown> }
+        >,
+        isDev: boolean = false,
       ) => {
         for (const [name, info] of Object.entries(deps)) {
           if (info.version) {
@@ -392,7 +395,7 @@ function parseLockFile(
  * Parse package.json to get direct dependencies with versions
  */
 function parsePackageJson(
-  targetDir: string
+  targetDir: string,
 ): Array<{ name: string; version: string; isDev: boolean }> {
   const packages: Array<{ name: string; version: string; isDev: boolean }> = [];
   const packageJsonPath = path.join(targetDir, 'package.json');
@@ -473,9 +476,7 @@ export async function scanWithOsv(targetDir: string): Promise<DependencyFinding[
         }
 
         // Get reference URL
-        const url = vuln.references?.find(
-          (r) => r.type === 'ADVISORY' || r.type === 'WEB'
-        )?.url;
+        const url = vuln.references?.find((r) => r.type === 'ADVISORY' || r.type === 'WEB')?.url;
 
         // Get vulnerable version range
         let vulnerableVersions: string | undefined;
