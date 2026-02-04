@@ -19,6 +19,13 @@ export interface DependencyFinding {
   name: string;
   severity: RiskSeverity;
   reason: string;
+  version?: string;
+  vulnerableVersions?: string;
+  cveId?: string;
+  cvssScore?: number;
+  source?: 'threat-db' | 'npm-audit' | 'osv' | 'pattern';
+  fixAvailable?: string;
+  url?: string;
 }
 
 export interface ScanResult {

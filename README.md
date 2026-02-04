@@ -19,7 +19,9 @@ SkillGuard analyzes local code to detect security risks like arbitrary shell exe
 ## 🚀 Features
 
 - **AST-Based Analysis**: Uses actual Abstract Syntax Tree parsing (not regex) for accurate code analysis
-- **Multi-Layer Detection**: Identifies risks in both source code and dependencies
+- **Vulnerability Scanning**: Integrates with npm audit and OSV database to detect known vulnerabilities (CVEs) in dependencies
+- **Multi-Layer Detection**: Identifies risks in both source code, direct dependencies, and transitive dependencies
+- **Lock File Analysis**: Deep inspection of package-lock.json to ensure exact installed versions are safe
 - **Risk Scoring**: Calculates a 0-100 risk score with severity levels
 - **Beautiful CLI Output**: Hacker-aesthetic terminal UI with colors and progress indicators
 - **JSON Output**: Machine-readable output for CI/CD integration

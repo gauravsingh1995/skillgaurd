@@ -1,11 +1,13 @@
 /**
  * SkillGuard Dependency Inspector
  * Checks package.json dependencies against a threat database
+ * and integrates with npm audit and OSV for real vulnerability detection
  */
 
 import * as fs from 'fs';
 import * as path from 'path';
 import { DependencyFinding, ThreatEntry, RiskSeverity } from './types';
+import { scanVulnerabilities } from './vulnerabilities';
 
 /**
  * Mock Threat Database
@@ -166,6 +168,7 @@ function checkDependency(depName: string): DependencyFinding | null {
       name: depName,
       severity: threat.severity,
       reason: threat.reason,
+      source: 'threat-db',
     };
   }
 
@@ -176,6 +179,7 @@ function checkDependency(depName: string): DependencyFinding | null {
         name: depName,
         severity,
         reason,
+        source: 'pattern',
       };
     }
   }
@@ -184,7 +188,8 @@ function checkDependency(depName: string): DependencyFinding | null {
 }
 
 /**
- * Inspect all dependencies in a directory
+ * Inspect all dependencies in a directory (synchronous, threat DB only)
+ * Use inspectDependenciesAsync for full vulnerability scanning
  */
 export function inspectDependencies(targetDir: string): DependencyFinding[] {
   const findings: DependencyFinding[] = [];
@@ -203,7 +208,58 @@ export function inspectDependencies(targetDir: string): DependencyFinding[] {
     }
   }
 
-  // Sort by severity
+  return sortFindings(findings);
+}
+
+/**
+ * Full async dependency inspection with real vulnerability scanning
+ * Combines threat database checks with npm audit and OSV database queries
+ */
+export async function inspectDependenciesAsync(targetDir: string): Promise<DependencyFinding[]> {
+  const findings: DependencyFinding[] = [];
+
+  const packageJson = readPackageJson(targetDir);
+  if (!packageJson) {
+    return findings;
+  }
+
+  const dependencies = getAllDependencies(packageJson);
+
+  // Check against local threat database first (fast)
+  for (const dep of dependencies) {
+    const finding = checkDependency(dep);
+    if (finding) {
+      findings.push(finding);
+    }
+  }
+
+  // Scan for real vulnerabilities using npm audit and OSV
+  try {
+    const vulnerabilities = await scanVulnerabilities(targetDir);
+
+    // Add vulnerabilities, avoiding duplicates
+    const existingKeys = new Set(findings.map(f => f.name.toLowerCase()));
+
+    for (const vuln of vulnerabilities) {
+      // Don't duplicate if already found by threat DB (but allow multiple vulns per package)
+      const key = `${vuln.name.toLowerCase()}:${vuln.cveId || vuln.reason}`;
+      if (!existingKeys.has(key)) {
+        findings.push(vuln);
+        existingKeys.add(key);
+      }
+    }
+  } catch {
+    // Vulnerability scanning failed, continue with threat DB results only
+    // This can happen due to network issues or missing lock files
+  }
+
+  return sortFindings(findings);
+}
+
+/**
+ * Sort findings by severity
+ */
+function sortFindings(findings: DependencyFinding[]): DependencyFinding[] {
   const severityOrder: Record<RiskSeverity, number> = {
     critical: 0,
     high: 1,
@@ -211,9 +267,7 @@ export function inspectDependencies(targetDir: string): DependencyFinding[] {
     low: 3,
   };
 
-  findings.sort((a, b) => severityOrder[a.severity] - severityOrder[b.severity]);
-
-  return findings;
+  return findings.sort((a, b) => severityOrder[a.severity] - severityOrder[b.severity]);
 }
 
 /**

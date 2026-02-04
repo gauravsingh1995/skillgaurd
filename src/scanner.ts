@@ -6,7 +6,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { analyzeDirectory } from './analyzer';
-import { inspectDependencies } from './dependencies';
+import { inspectDependencies, inspectDependenciesAsync } from './dependencies';
 import { calculateRiskScore, getRiskLevel } from './scorer';
 import { ScanResult } from './types';
 
@@ -31,8 +31,8 @@ export async function scan(targetDir: string): Promise<ScanResult> {
   // Run code analysis
   const { findings: codeFindings, scannedFiles } = analyzeDirectory(absolutePath);
 
-  // Run dependency analysis
-  const dependencyFindings = inspectDependencies(absolutePath);
+  // Run dependency analysis with real vulnerability scanning
+  const dependencyFindings = await inspectDependenciesAsync(absolutePath);
 
   // Calculate risk score
   const riskScore = calculateRiskScore(codeFindings, dependencyFindings);

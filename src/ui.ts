@@ -8,7 +8,7 @@ import boxen from 'boxen';
 import figlet from 'figlet';
 import ora from 'ora';
 import * as path from 'path';
-import { ScanResult, Finding, RiskSeverity } from './types';
+import { ScanResult, Finding, DependencyFinding, RiskSeverity } from './types';
 
 /**
  * Color scheme for hacker aesthetic
@@ -109,6 +109,66 @@ function formatFilePath(filePath: string, basePath: string): string {
 }
 
 /**
+ * Display detailed vulnerability finding
+ */
+function displayVulnerabilityFinding(finding: DependencyFinding): void {
+  console.log();
+
+  // Package name with version if available
+  const pkgDisplay = finding.version
+    ? `${finding.name}@${finding.version}`
+    : finding.name;
+  console.log(`    ${formatSeverityBadge(finding.severity)} ${colors.bold(pkgDisplay)}`);
+
+  // CVE ID if available
+  if (finding.cveId) {
+    console.log(`      ${colors.dim('CVE:')} ${colors.danger(finding.cveId)}`);
+  }
+
+  // CVSS Score if available
+  if (finding.cvssScore !== undefined) {
+    const cvssColor =
+      finding.cvssScore >= 9.0
+        ? colors.critical
+        : finding.cvssScore >= 7.0
+          ? colors.danger
+          : finding.cvssScore >= 4.0
+            ? colors.warning
+            : colors.low;
+    console.log(`      ${colors.dim('CVSS Score:')} ${cvssColor(finding.cvssScore.toFixed(1))}`);
+  }
+
+  // Vulnerability description
+  console.log(`      ${colors.dim('Issue:')} ${finding.reason}`);
+
+  // Vulnerable version range
+  if (finding.vulnerableVersions) {
+    console.log(`      ${colors.dim('Affected:')} ${finding.vulnerableVersions}`);
+  }
+
+  // Fix available
+  if (finding.fixAvailable) {
+    console.log(`      ${colors.dim('Fix:')} ${colors.success(finding.fixAvailable)}`);
+  }
+
+  // Source
+  if (finding.source) {
+    const sourceLabel =
+      finding.source === 'npm-audit'
+        ? 'npm audit'
+        : finding.source === 'osv'
+          ? 'OSV Database'
+          : finding.source;
+    console.log(`      ${colors.dim('Source:')} ${colors.secondary(sourceLabel)}`);
+  }
+
+  // Reference URL
+  if (finding.url) {
+    console.log(`      ${colors.dim('More info:')} ${colors.primary(finding.url)}`);
+  }
+}
+
+/**
  * Display the scan report
  */
 export function showReport(result: ScanResult, targetDir: string): void {
@@ -177,13 +237,33 @@ export function showReport(result: ScanResult, targetDir: string): void {
 
   // Dependency findings section
   if (result.dependencyFindings.length > 0) {
-    console.log(colors.bold('\n\n  📦 DEPENDENCY ANALYSIS FINDINGS'));
+    console.log(colors.bold('\n\n  📦 DEPENDENCY VULNERABILITY FINDINGS'));
     console.log(colors.secondary('  ─────────────────────────────────────────'));
 
-    for (const finding of result.dependencyFindings) {
-      console.log();
-      console.log(`    ${formatSeverityBadge(finding.severity)} ${colors.bold(finding.name)}`);
-      console.log(`      ${colors.dim('Reason:')} ${finding.reason}`);
+    // Group by source for better organization
+    const vulnFindings = result.dependencyFindings.filter(
+      (f) => f.source === 'npm-audit' || f.source === 'osv'
+    );
+    const threatDbFindings = result.dependencyFindings.filter(
+      (f) => f.source === 'threat-db' || f.source === 'pattern' || !f.source
+    );
+
+    // Show real vulnerabilities first
+    if (vulnFindings.length > 0) {
+      console.log(colors.accent('\n  ► Known Vulnerabilities (CVE/Advisory)'));
+      for (const finding of vulnFindings) {
+        displayVulnerabilityFinding(finding);
+      }
+    }
+
+    // Show threat database matches
+    if (threatDbFindings.length > 0) {
+      console.log(colors.accent('\n  ► Threat Database Matches'));
+      for (const finding of threatDbFindings) {
+        console.log();
+        console.log(`    ${formatSeverityBadge(finding.severity)} ${colors.bold(finding.name)}`);
+        console.log(`      ${colors.dim('Reason:')} ${finding.reason}`);
+      }
     }
   }
 
@@ -248,7 +328,28 @@ export function showReport(result: ScanResult, targetDir: string): void {
       );
     }
     if (result.dependencyFindings.length > 0) {
-      console.log(colors.warning('  ⚠ Review flagged dependencies before installing.'));
+      const hasVulns = result.dependencyFindings.some(
+        (f) => f.source === 'npm-audit' || f.source === 'osv'
+      );
+      const hasFixable = result.dependencyFindings.some((f) => f.fixAvailable);
+      const hasCriticalVulns = result.dependencyFindings.some(
+        (f) => f.severity === 'critical' && (f.source === 'npm-audit' || f.source === 'osv')
+      );
+
+      if (hasCriticalVulns) {
+        console.log(
+          colors.danger('  ⚠ CRITICAL vulnerabilities found! Update affected packages immediately.')
+        );
+      }
+      if (hasVulns) {
+        console.log(colors.warning('  ⚠ Known vulnerabilities detected in dependencies.'));
+      }
+      if (hasFixable) {
+        console.log(colors.success('  ✓ Some vulnerabilities have fixes available. Run: npm audit fix'));
+      }
+      if (!hasVulns && result.dependencyFindings.length > 0) {
+        console.log(colors.warning('  ⚠ Review flagged dependencies before installing.'));
+      }
     }
   }
 
