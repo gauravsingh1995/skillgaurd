@@ -1,6 +1,6 @@
 {
-  "name": "@gauravsingh1995/skillgaurd",
-  "version": "1.1.1",
+  "name": "skillguard",
+  "version": "1.1.2",
   "description": "CLI security scanner for AI Agent Skills (Multi-language support: JavaScript, TypeScript, Python, Java, Go, Ruby, PHP, C/C++, Rust)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -15,15 +15,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gauravsingh1995/skillgaurd.git"
+    "url": "git+https://github.com/gauravsingh1995/skillguard.git"
   },
   "bugs": {
-    "url": "https://github.com/gauravsingh1995/skillgaurd/issues"
+    "url": "https://github.com/gauravsingh1995/skillguard/issues"
   },
-  "homepage": "https://github.com/gauravsingh1995/skillgaurd#readme",
-  "publishConfig": {
-    "access": "public"
-  },
+  "homepage": "https://github.com/gauravsingh1995/skillguard#readme",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
