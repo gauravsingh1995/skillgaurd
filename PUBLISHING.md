@@ -17,11 +17,11 @@ npm publish
 
 - npm account at https://www.npmjs.com
 - Authenticated with `npm login`
-- Package name `@gauravsingh1995/skillgaurd` available
+- Package name `skillguard` available
 
 ## Current Status
 
-- ✅ Package name: `@gauravsingh1995/skillgaurd`
+- ✅ Package name: `skillguard`
 - ✅ Version: `1.1.2`
 - ✅ Tests passing
 - ✅ CI will pass after latest push
@@ -36,6 +36,6 @@ npm publish
 
 Then verify:
 ```bash
-npm view @gauravsingh1995/skillgaurd
-npx @gauravsingh1995/skillgaurd scan --help
+npm view skillguard
+npx skillguard scan --help
 ```

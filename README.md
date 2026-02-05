@@ -2,7 +2,7 @@
 
 ![CI](https://github.com/gauravsingh1995/skillgaurd/workflows/CI/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![npm version](https://badge.fury.io/js/@gauravsingh1995%2Fskillgaurd.svg)](https://www.npmjs.com/package/@gauravsingh1995/skillgaurd)
+[![npm version](https://badge.fury.io/js/skillguard.svg)](https://www.npmjs.com/package/skillguard)
 
 **The First Multi-Language Security Scanner Purpose-Built for AI Agent Skills**
 
@@ -114,10 +114,10 @@ skillguard scan ./agent-marketplace --json > analysis.json
 
 ```bash
 # Install globally
-npm install -g @gauravsingh1995/skillgaurd
+npm install -g skillguard
 
 # Or use with npx (no installation)
-npx @gauravsingh1995/skillgaurd scan ./my-project
+npx skillguard scan ./my-project
 ```
 
 ### From Source
@@ -526,7 +526,7 @@ Please read our [Contributing Guidelines](CONTRIBUTING.md) and [Code of Conduct]
 - 🐛 **Bug Reports**: [GitHub Issues](https://github.com/gauravsingh1995/skillgaurd/issues)
 - 💡 **Feature Requests**: [GitHub Discussions](https://github.com/gauravsingh1995/skillgaurd/discussions)
 - 📖 **Documentation**: [CONFIGURATION.md](CONFIGURATION.md)
-- 🌐 **npm Package**: [@gauravsingh1995/skillgaurd](https://www.npmjs.com/package/@gauravsingh1995/skillgaurd)
+- 🌐 **npm Package**: [skillguard](https://www.npmjs.com/package/skillguard)
 
 ## ⚠️ Disclaimer
 

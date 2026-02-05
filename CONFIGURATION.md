@@ -353,7 +353,7 @@ skillguard scan . --config .skillguardrc.prod.json
 # GitHub Actions example
 - name: Security Scan (Strict)
   run: |
-    npx @gauravsingh1995/skillgaurd scan . --config .skillguardrc.strict.json --json > results.json
+    npx skillguard scan . --config .skillguardrc.strict.json --json > results.json
 ```
 
 ### Pattern Priority
