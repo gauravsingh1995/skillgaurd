@@ -139,7 +139,7 @@ const JAVA_PATTERNS: JavaPattern[] = [
   },
 
   // ===== CREDENTIAL THEFT PATTERNS =====
-  
+
   {
     name: 'Hardcoded Secret',
     severity: 'critical',
@@ -177,7 +177,7 @@ const JAVA_PATTERNS: JavaPattern[] = [
   },
 
   // ===== CODE INJECTION PATTERNS =====
-  
+
   {
     name: 'SpEL Injection',
     severity: 'critical',
@@ -208,7 +208,7 @@ const JAVA_PATTERNS: JavaPattern[] = [
   },
 
   // ===== PROMPT MANIPULATION PATTERNS =====
-  
+
   {
     name: 'String Format Prompt',
     severity: 'high',
@@ -225,7 +225,7 @@ const JAVA_PATTERNS: JavaPattern[] = [
   },
 
   // ===== DATA EXFILTRATION PATTERNS =====
-  
+
   {
     name: 'DNS Lookup',
     severity: 'high',
@@ -263,7 +263,7 @@ const JAVA_PATTERNS: JavaPattern[] = [
   },
 
   // ===== EVASION TECHNIQUE PATTERNS =====
-  
+
   {
     name: 'Base64 Decode',
     severity: 'high',

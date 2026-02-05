@@ -160,13 +160,14 @@ const RUBY_PATTERNS: RubyPattern[] = [
   },
 
   // ===== CREDENTIAL THEFT PATTERNS =====
-  
+
   {
     name: 'Hardcoded Secret',
     severity: 'critical',
     category: 'Credential Theft',
     description: 'Hardcoded API key or password detected',
-    pattern: /(?:api_key|api_secret|password|secret_key|auth_token|access_token)\s*=\s*['"][^'"]{8,}['"]/gi,
+    pattern:
+      /(?:api_key|api_secret|password|secret_key|auth_token|access_token)\s*=\s*['"][^'"]{8,}['"]/gi,
   },
   {
     name: 'SSH Key Access',
@@ -191,7 +192,7 @@ const RUBY_PATTERNS: RubyPattern[] = [
   },
 
   // ===== CODE INJECTION PATTERNS =====
-  
+
   {
     name: 'module_eval',
     severity: 'critical',
@@ -222,7 +223,7 @@ const RUBY_PATTERNS: RubyPattern[] = [
   },
 
   // ===== PROMPT MANIPULATION PATTERNS =====
-  
+
   {
     name: 'String Interpolation Prompt',
     severity: 'high',
@@ -239,7 +240,7 @@ const RUBY_PATTERNS: RubyPattern[] = [
   },
 
   // ===== DATA EXFILTRATION PATTERNS =====
-  
+
   {
     name: 'DNS Lookup',
     severity: 'high',
@@ -270,7 +271,7 @@ const RUBY_PATTERNS: RubyPattern[] = [
   },
 
   // ===== EVASION TECHNIQUE PATTERNS =====
-  
+
   {
     name: 'Base64 Eval',
     severity: 'high',

@@ -125,13 +125,14 @@ const GO_PATTERNS: GoPattern[] = [
   },
 
   // ===== CREDENTIAL THEFT PATTERNS =====
-  
+
   {
     name: 'Hardcoded Secret',
     severity: 'critical',
     category: 'Credential Theft',
     description: 'Hardcoded API key or password detected',
-    pattern: /(?:apiKey|apiSecret|password|secretKey|authToken|accessToken)\s*(?:=|:=)\s*"[^"]{8,}"/gi,
+    pattern:
+      /(?:apiKey|apiSecret|password|secretKey|authToken|accessToken)\s*(?:=|:=)\s*"[^"]{8,}"/gi,
   },
   {
     name: 'SSH Key Access',
@@ -156,7 +157,7 @@ const GO_PATTERNS: GoPattern[] = [
   },
 
   // ===== CODE INJECTION PATTERNS =====
-  
+
   {
     name: 'Template Injection',
     severity: 'high',
@@ -180,7 +181,7 @@ const GO_PATTERNS: GoPattern[] = [
   },
 
   // ===== PROMPT MANIPULATION PATTERNS =====
-  
+
   {
     name: 'String Format Prompt',
     severity: 'high',
@@ -197,7 +198,7 @@ const GO_PATTERNS: GoPattern[] = [
   },
 
   // ===== DATA EXFILTRATION PATTERNS =====
-  
+
   {
     name: 'DNS Lookup',
     severity: 'high',
@@ -235,7 +236,7 @@ const GO_PATTERNS: GoPattern[] = [
   },
 
   // ===== EVASION TECHNIQUE PATTERNS =====
-  
+
   {
     name: 'Base64 Decode',
     severity: 'high',

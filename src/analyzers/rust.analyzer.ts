@@ -111,13 +111,14 @@ const RUST_PATTERNS: RustPattern[] = [
   },
 
   // ===== CREDENTIAL THEFT PATTERNS =====
-  
+
   {
     name: 'Hardcoded Secret',
     severity: 'critical',
     category: 'Credential Theft',
     description: 'Hardcoded API key or password detected',
-    pattern: /(?:api_key|api_secret|password|secret_key|auth_token|access_token)\s*(?:=|:)\s*"[^"]{8,}"/gi,
+    pattern:
+      /(?:api_key|api_secret|password|secret_key|auth_token|access_token)\s*(?:=|:)\s*"[^"]{8,}"/gi,
   },
   {
     name: 'SSH Key Access',
@@ -142,7 +143,7 @@ const RUST_PATTERNS: RustPattern[] = [
   },
 
   // ===== CODE INJECTION PATTERNS =====
-  
+
   {
     name: 'libloading',
     severity: 'critical',
@@ -166,7 +167,7 @@ const RUST_PATTERNS: RustPattern[] = [
   },
 
   // ===== PROMPT MANIPULATION PATTERNS =====
-  
+
   {
     name: 'Format Prompt',
     severity: 'high',
@@ -183,7 +184,7 @@ const RUST_PATTERNS: RustPattern[] = [
   },
 
   // ===== DATA EXFILTRATION PATTERNS =====
-  
+
   {
     name: 'DNS Lookup',
     severity: 'high',
@@ -221,7 +222,7 @@ const RUST_PATTERNS: RustPattern[] = [
   },
 
   // ===== EVASION TECHNIQUE PATTERNS =====
-  
+
   {
     name: 'Base64 Decode',
     severity: 'high',

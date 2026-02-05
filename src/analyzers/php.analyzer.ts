@@ -195,13 +195,14 @@ const PHP_PATTERNS: PHPPattern[] = [
   },
 
   // ===== CREDENTIAL THEFT PATTERNS =====
-  
+
   {
     name: 'Hardcoded Secret',
     severity: 'critical',
     category: 'Credential Theft',
     description: 'Hardcoded API key or password detected',
-    pattern: /(?:api_key|api_secret|password|secret_key|auth_token|access_token)\s*=\s*['"][^'"]{8,}['"]/gi,
+    pattern:
+      /(?:api_key|api_secret|password|secret_key|auth_token|access_token)\s*=\s*['"][^'"]{8,}['"]/gi,
   },
   {
     name: 'SSH Key Access',
@@ -215,7 +216,8 @@ const PHP_PATTERNS: PHPPattern[] = [
     severity: 'medium',
     category: 'Credential Theft',
     description: 'Accesses configuration files',
-    pattern: /(?:file_get_contents|include|require)\s*\([^)]*(?:\.env|config\.php|credentials|secrets)/gi,
+    pattern:
+      /(?:file_get_contents|include|require)\s*\([^)]*(?:\.env|config\.php|credentials|secrets)/gi,
   },
   {
     name: 'Database Credentials',
@@ -226,7 +228,7 @@ const PHP_PATTERNS: PHPPattern[] = [
   },
 
   // ===== CODE INJECTION PATTERNS =====
-  
+
   {
     name: 'Twig Injection',
     severity: 'critical',
@@ -257,7 +259,7 @@ const PHP_PATTERNS: PHPPattern[] = [
   },
 
   // ===== PROMPT MANIPULATION PATTERNS =====
-  
+
   {
     name: 'String Interpolation Prompt',
     severity: 'high',
@@ -274,7 +276,7 @@ const PHP_PATTERNS: PHPPattern[] = [
   },
 
   // ===== DATA EXFILTRATION PATTERNS =====
-  
+
   {
     name: 'DNS Lookup',
     severity: 'high',
@@ -305,7 +307,7 @@ const PHP_PATTERNS: PHPPattern[] = [
   },
 
   // ===== EVASION TECHNIQUE PATTERNS =====
-  
+
   {
     name: 'Base64 Eval',
     severity: 'critical',

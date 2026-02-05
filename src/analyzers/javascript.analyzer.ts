@@ -193,7 +193,7 @@ const JS_RISK_PATTERNS: RiskPattern[] = [
       if (node.callee?.type === 'MemberExpression') {
         const prop = node.callee.property;
         if (prop?.type === 'Identifier' && prop.name === 'create') {
-          let obj = node.callee.object;
+          const obj = node.callee.object;
           // Check for chat.completions or completions
           if (obj?.type === 'MemberExpression') {
             const parentProp = obj.property;
@@ -220,7 +220,7 @@ const JS_RISK_PATTERNS: RiskPattern[] = [
       if (node.callee?.type === 'MemberExpression') {
         const prop = node.callee.property;
         if (prop?.type === 'Identifier' && prop.name === 'create') {
-          let obj = node.callee.object;
+          const obj = node.callee.object;
           if (obj?.type === 'MemberExpression') {
             const parentProp = obj.property;
             if (parentProp?.type === 'Identifier' && parentProp.name === 'messages') {
@@ -302,7 +302,7 @@ const JS_RISK_PATTERNS: RiskPattern[] = [
   },
 
   // ===== CREDENTIAL THEFT PATTERNS =====
-  
+
   // CRITICAL: Hardcoded credentials in code
   {
     name: 'Hardcoded Secret',
@@ -315,7 +315,7 @@ const JS_RISK_PATTERNS: RiskPattern[] = [
         const val = node.init.value;
         const name = node.id?.name?.toUpperCase() || '';
         const sensitiveNames = ['KEY', 'SECRET', 'TOKEN', 'PASSWORD', 'API', 'AUTH', 'CREDENTIAL'];
-        const hasSecretName = sensitiveNames.some(s => name.includes(s));
+        const hasSecretName = sensitiveNames.some((s) => name.includes(s));
         const looksLikeKey = /^[a-zA-Z0-9_-]{20,}$/.test(val) || /^sk-[a-zA-Z0-9]{20,}$/.test(val);
         return hasSecretName && (val.length > 8 || looksLikeKey);
       }
@@ -333,7 +333,12 @@ const JS_RISK_PATTERNS: RiskPattern[] = [
         const arg = node.arguments?.[0];
         if (arg?.type === 'Literal' && typeof arg.value === 'string') {
           const path = arg.value.toLowerCase();
-          return path.includes('.ssh') || path.includes('id_rsa') || path.includes('id_ed25519') || path.includes('id_dsa');
+          return (
+            path.includes('.ssh') ||
+            path.includes('id_rsa') ||
+            path.includes('id_ed25519') ||
+            path.includes('id_dsa')
+          );
         }
         if (arg?.type === 'TemplateLiteral') {
           const str = arg.quasis?.map((q: any) => q.value.raw).join('') || '';
@@ -350,7 +355,13 @@ const JS_RISK_PATTERNS: RiskPattern[] = [
     description: 'Accesses system keychain or credential store',
     nodeType: 'CallExpression',
     matcher: (node: any) => {
-      return isCallToFunction(node, ['getPassword', 'findCredentials', 'findPassword', 'getGenericPassword', 'getInternetPassword']);
+      return isCallToFunction(node, [
+        'getPassword',
+        'findCredentials',
+        'findPassword',
+        'getGenericPassword',
+        'getInternetPassword',
+      ]);
     },
   },
   {
@@ -364,7 +375,13 @@ const JS_RISK_PATTERNS: RiskPattern[] = [
         const arg = node.arguments?.[0];
         if (arg?.type === 'Literal' && typeof arg.value === 'string') {
           const path = arg.value.toLowerCase();
-          return path.includes('.env') || path.includes('credentials') || path.includes('.npmrc') || path.includes('.netrc') || path.includes('.aws');
+          return (
+            path.includes('.env') ||
+            path.includes('credentials') ||
+            path.includes('.npmrc') ||
+            path.includes('.netrc') ||
+            path.includes('.aws')
+          );
         }
       }
       return false;
@@ -372,7 +389,7 @@ const JS_RISK_PATTERNS: RiskPattern[] = [
   },
 
   // ===== CODE INJECTION PATTERNS =====
-  
+
   {
     name: 'Template Injection',
     severity: 'critical',
@@ -390,7 +407,13 @@ const JS_RISK_PATTERNS: RiskPattern[] = [
     description: 'Node.js VM module - can execute arbitrary code',
     nodeType: 'CallExpression',
     matcher: (node: any) => {
-      return isCallToMemberFunction(node, 'vm', ['runInContext', 'runInNewContext', 'runInThisContext', 'createScript', 'compileFunction']);
+      return isCallToMemberFunction(node, 'vm', [
+        'runInContext',
+        'runInNewContext',
+        'runInThisContext',
+        'createScript',
+        'compileFunction',
+      ]);
     },
   },
   {
@@ -400,7 +423,10 @@ const JS_RISK_PATTERNS: RiskPattern[] = [
     description: 'Timer with string argument - implicit eval',
     nodeType: 'CallExpression',
     matcher: (node: any) => {
-      if (node.callee?.type === 'Identifier' && ['setTimeout', 'setInterval'].includes(node.callee.name)) {
+      if (
+        node.callee?.type === 'Identifier' &&
+        ['setTimeout', 'setInterval'].includes(node.callee.name)
+      ) {
         const arg = node.arguments?.[0];
         return arg?.type === 'Literal' && typeof arg.value === 'string';
       }
@@ -419,7 +445,7 @@ const JS_RISK_PATTERNS: RiskPattern[] = [
   },
 
   // ===== PROMPT MANIPULATION PATTERNS =====
-  
+
   {
     name: 'System Prompt Construction',
     severity: 'high',
@@ -455,7 +481,7 @@ const JS_RISK_PATTERNS: RiskPattern[] = [
   },
 
   // ===== DATA EXFILTRATION PATTERNS =====
-  
+
   {
     name: 'DNS Lookup',
     severity: 'high',
@@ -463,7 +489,13 @@ const JS_RISK_PATTERNS: RiskPattern[] = [
     description: 'DNS lookup - potential DNS exfiltration',
     nodeType: 'CallExpression',
     matcher: (node: any) => {
-      return isCallToMemberFunction(node, 'dns', ['lookup', 'resolve', 'resolve4', 'resolve6', 'resolveTxt']);
+      return isCallToMemberFunction(node, 'dns', [
+        'lookup',
+        'resolve',
+        'resolve4',
+        'resolve6',
+        'resolveTxt',
+      ]);
     },
   },
   {
@@ -473,8 +505,10 @@ const JS_RISK_PATTERNS: RiskPattern[] = [
     description: 'Clipboard access - potential data theft',
     nodeType: 'CallExpression',
     matcher: (node: any) => {
-      return isCallToMemberFunction(node, 'clipboard', ['readText', 'writeText', 'read', 'write']) ||
-             isCallToFunction(node, ['readClipboard', 'writeClipboard', 'getClipboard', 'setClipboard']);
+      return (
+        isCallToMemberFunction(node, 'clipboard', ['readText', 'writeText', 'read', 'write']) ||
+        isCallToFunction(node, ['readClipboard', 'writeClipboard', 'getClipboard', 'setClipboard'])
+      );
     },
   },
   {
@@ -484,7 +518,13 @@ const JS_RISK_PATTERNS: RiskPattern[] = [
     description: 'Screen capture - potential visual data theft',
     nodeType: 'CallExpression',
     matcher: (node: any) => {
-      return isCallToFunction(node, ['screenshot', 'captureScreen', 'takeScreenshot', 'getDisplayMedia', 'desktopCapturer']);
+      return isCallToFunction(node, [
+        'screenshot',
+        'captureScreen',
+        'takeScreenshot',
+        'getDisplayMedia',
+        'desktopCapturer',
+      ]);
     },
   },
   {
@@ -519,7 +559,7 @@ const JS_RISK_PATTERNS: RiskPattern[] = [
   },
 
   // ===== EVASION TECHNIQUE PATTERNS =====
-  
+
   {
     name: 'Base64 Decode Execution',
     severity: 'high',
@@ -527,8 +567,9 @@ const JS_RISK_PATTERNS: RiskPattern[] = [
     description: 'Base64 decoding with execution - obfuscation technique',
     nodeType: 'CallExpression',
     matcher: (node: any) => {
-      return isCallToFunction(node, ['atob', 'btoa']) ||
-             isCallToMemberFunction(node, 'Buffer', ['from']);
+      return (
+        isCallToFunction(node, ['atob', 'btoa']) || isCallToMemberFunction(node, 'Buffer', ['from'])
+      );
     },
   },
   {
@@ -538,7 +579,10 @@ const JS_RISK_PATTERNS: RiskPattern[] = [
     description: 'Delayed execution - potential sandbox evasion',
     nodeType: 'CallExpression',
     matcher: (node: any) => {
-      if (node.callee?.type === 'Identifier' && ['setTimeout', 'setInterval'].includes(node.callee.name)) {
+      if (
+        node.callee?.type === 'Identifier' &&
+        ['setTimeout', 'setInterval'].includes(node.callee.name)
+      ) {
         const delay = node.arguments?.[1];
         if (delay?.type === 'Literal' && typeof delay.value === 'number') {
           return delay.value > 30000;
@@ -572,7 +616,12 @@ const JS_RISK_PATTERNS: RiskPattern[] = [
     description: 'String encoding/obfuscation - review for malicious intent',
     nodeType: 'CallExpression',
     matcher: (node: any) => {
-      return isCallToFunction(node, ['charCodeAt', 'fromCharCode', 'encodeURIComponent', 'decodeURIComponent']);
+      return isCallToFunction(node, [
+        'charCodeAt',
+        'fromCharCode',
+        'encodeURIComponent',
+        'decodeURIComponent',
+      ]);
     },
   },
   {

@@ -174,13 +174,14 @@ const PYTHON_PATTERNS: PythonPattern[] = [
   },
 
   // ===== CREDENTIAL THEFT PATTERNS =====
-  
+
   {
     name: 'Hardcoded Secret',
     severity: 'critical',
     category: 'Credential Theft',
     description: 'Hardcoded API key or password detected',
-    pattern: /(?:api_key|api_secret|password|secret_key|auth_token|access_token)\s*=\s*['"][^'"]{8,}['"]/gi,
+    pattern:
+      /(?:api_key|api_secret|password|secret_key|auth_token|access_token)\s*=\s*['"][^'"]{8,}['"]/gi,
   },
   {
     name: 'SSH Key Access',
@@ -212,7 +213,7 @@ const PYTHON_PATTERNS: PythonPattern[] = [
   },
 
   // ===== CODE INJECTION PATTERNS =====
-  
+
   {
     name: 'Template Injection',
     severity: 'critical',
@@ -243,13 +244,14 @@ const PYTHON_PATTERNS: PythonPattern[] = [
   },
 
   // ===== PROMPT MANIPULATION PATTERNS =====
-  
+
   {
     name: 'F-String Prompt',
     severity: 'high',
     category: 'Prompt Injection',
     description: 'F-string in prompt - potential prompt injection',
-    pattern: /(?:prompt|system_message|user_message)\s*=\s*f['"]|f['"][^'"]*(?:prompt|system|instruction)/gi,
+    pattern:
+      /(?:prompt|system_message|user_message)\s*=\s*f['"]|f['"][^'"]*(?:prompt|system|instruction)/gi,
   },
   {
     name: 'Prompt Format',
@@ -267,7 +269,7 @@ const PYTHON_PATTERNS: PythonPattern[] = [
   },
 
   // ===== DATA EXFILTRATION PATTERNS =====
-  
+
   {
     name: 'DNS Exfiltration',
     severity: 'high',
@@ -312,7 +314,7 @@ const PYTHON_PATTERNS: PythonPattern[] = [
   },
 
   // ===== EVASION TECHNIQUE PATTERNS =====
-  
+
   {
     name: 'Base64 Execution',
     severity: 'high',

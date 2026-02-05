@@ -139,13 +139,14 @@ const CPP_PATTERNS: CppPattern[] = [
   },
 
   // ===== CREDENTIAL THEFT PATTERNS =====
-  
+
   {
     name: 'Hardcoded Secret',
     severity: 'critical',
     category: 'Credential Theft',
     description: 'Hardcoded API key or password detected',
-    pattern: /(?:api_key|api_secret|password|secret_key|auth_token|access_token)\s*=\s*"[^"]{8,}"/gi,
+    pattern:
+      /(?:api_key|api_secret|password|secret_key|auth_token|access_token)\s*=\s*"[^"]{8,}"/gi,
   },
   {
     name: 'SSH Key Access',
@@ -170,7 +171,7 @@ const CPP_PATTERNS: CppPattern[] = [
   },
 
   // ===== CODE INJECTION PATTERNS =====
-  
+
   {
     name: 'dlopen',
     severity: 'critical',
@@ -194,7 +195,7 @@ const CPP_PATTERNS: CppPattern[] = [
   },
 
   // ===== PROMPT MANIPULATION PATTERNS =====
-  
+
   {
     name: 'Sprintf Prompt',
     severity: 'high',
@@ -211,7 +212,7 @@ const CPP_PATTERNS: CppPattern[] = [
   },
 
   // ===== DATA EXFILTRATION PATTERNS =====
-  
+
   {
     name: 'DNS Query',
     severity: 'high',
@@ -249,7 +250,7 @@ const CPP_PATTERNS: CppPattern[] = [
   },
 
   // ===== EVASION TECHNIQUE PATTERNS =====
-  
+
   {
     name: 'XOR Obfuscation',
     severity: 'high',
